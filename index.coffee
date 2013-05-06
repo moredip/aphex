@@ -1,4 +1,6 @@
-SerialPort = require('serialport').SerialPort
+serialport = require('serialport')
+SerialPort = serialport.SerialPort
+
 console = require('console')
 
 tty = process.argv[2]
@@ -7,17 +9,40 @@ unless tty
   process.stderr.write("running `ls -l /dev/tty*usb*` will probably show you some candidates\n")
   process.exit(1)
 
+
+randomColor = ->
+  randomComponent = ->
+    number = Math.floor(Math.random() * 255)
+    asHex = number.toString(16)
+    if asHex.length == 1 then ('0'+asHex) else asHex
+
+  red = randomComponent()
+  blue = randomComponent()
+  green = randomComponent()
+  red+blue+green
+
+
+requestRandomColor = (serialPort)->
+  color = randomColor()
+  console.log( 'sending ' + color )
+  serialPort.write color
+
+
 letsGo = (serialPort)->
   console.log("Let's GO!")
   serialPort.on 'data', (data)->
-    console.log('data received: ' + data)
+    console.log("    > #{data}")
 
-  serialPort.write "aaff88", (err,results)->
-    console.log('err ' + err)
-    console.log('results ' + results)
+  setInterval( (->requestRandomColor(serialPort)), 100 )
+
 
 do ->
-  serialPort = new SerialPort tty, {baudrate: 57600}, false
+  serialPort = new SerialPort(
+    tty, 
+    {baudrate: 57600, parser: serialport.parsers.readline("\n") }, 
+    false
+  )
+
   serialPort.open ->
     console.log('open')
 
