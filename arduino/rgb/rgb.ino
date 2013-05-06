@@ -1,8 +1,9 @@
 #include "serial_stream.h"
-#include "light.h"
-#include "color.h"
+#include "blinker_task.h"
 
 Light light(9,10,11);
+Color purple("ffff00");
+BlinkerTask awaitingOrders = BlinkerTask(purple,light,800);
 
 void setup() {                
   light.setup();
@@ -18,7 +19,10 @@ const Color readRGB(){
 }
 
 void loop() {
+  awaitingOrders.slice();
   if( !Serial.available() ) return;
+
+  awaitingOrders.disable();
  
   const Color color = readRGB();
   color.describe( Serial ); Serial << '\n';
