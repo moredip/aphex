@@ -1,4 +1,4 @@
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
+#include "serial_stream.h"
 
 int redLed = 9;
 int greenLed = 10;
