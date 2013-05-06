@@ -1,0 +1,4 @@
+.dep/
+.lib/
+a.out.hex
+*.o
