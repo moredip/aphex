@@ -8,6 +8,7 @@ public:
   void slice() const;
 
   void disable();
+  void enable();
 
 private:
   const Color _color;

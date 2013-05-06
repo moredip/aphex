@@ -16,6 +16,5 @@ void BlinkerTask::slice() const{
   }
 }
 
-void BlinkerTask::disable(){
-  _disabled = true;
-}
+void BlinkerTask::disable(){ _disabled = true; }
+void BlinkerTask::enable(){ _disabled = false; }
