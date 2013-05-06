@@ -11,5 +11,8 @@
     "url": "https://github.com/moredip/aphex"
   },
   "author": "Pete Hodgson",
-  "license": "BSD"
+  "license": "Apache 2.0",
+  "dependencies": {
+    "serialport": "~1.1.0"
+  }
 }
