@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "blinker_task.h"
 
-BlinkerTask::BlinkerTask( const Color &color, const Light &light, const int rate )
+BlinkerTask::BlinkerTask( const Light &light, const Color &color, const int rate )
   : _color(color), _light(light), _rate(rate), _disabled(false)
 {}
 

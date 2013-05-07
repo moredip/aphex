@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "serial_stream.h"
 #include "color.h"
 
@@ -9,10 +8,37 @@ int readAndParseColor(const char *buffer, int offset){
   return strtol( colorBuffer, NULL, 16 );
 }
 
+void Color::init( int red, int green, int blue )
+{
+  _red = red;
+  _green = green;
+  _blue = blue;
+}
+
 Color::Color( const char *webHexString ){
-  _red = readAndParseColor(webHexString,0);
-  _green = readAndParseColor(webHexString,2);
-  _blue = readAndParseColor(webHexString,4);
+  init( 
+      readAndParseColor(webHexString,0),
+      readAndParseColor(webHexString,2),
+      readAndParseColor(webHexString,4)
+  );
+}
+
+Color::Color( int red, int green, int blue )
+{
+  init( red, green, blue );
+}
+
+int tween( int thisVal, int otherVal, float distance ){
+  int range = otherVal-thisVal;
+  return thisVal + (distance*range);
+}
+
+Color Color::tween( const Color &other, float distance ) const {
+  return Color( 
+      ::tween( _red, other._red, distance ),
+      ::tween( _blue, other._blue, distance ),
+      ::tween( _green, other._green, distance )
+  );
 }
 
 void Color::describe(Stream &s) const{

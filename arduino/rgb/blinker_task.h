@@ -1,9 +1,11 @@
+#pragma once
+
 #include "color.h"
 #include "light.h"
 
 class BlinkerTask {
 public:
-  BlinkerTask( const Color &color, const Light &light, const int rate );
+  BlinkerTask( const Light &light, const Color &color, const int rate );
 
   void slice() const;
 

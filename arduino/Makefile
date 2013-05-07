@@ -1,3 +1,3 @@
-SOURCES := rgb/rgb.ino rgb/light.cpp rgb/color.cpp rgb/blinker_task.cpp rgb/watchdog.cpp
+SOURCES := rgb.cpp rgb/blinker_task.cpp rgb/color.cpp rgb/fader_task.cpp rgb/light.cpp rgb/watchdog.cpp
 BOARD := nano328
 include arduino.mk
