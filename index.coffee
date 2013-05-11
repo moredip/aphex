@@ -33,7 +33,7 @@ letsGo = (serialPort)->
   serialPort.on 'data', (data)->
     console.log("    > #{data}")
 
-  setInterval( (->requestRandomColor(serialPort)), 100 )
+  setInterval( (->requestRandomColor(serialPort)), 500 )
 
 
 do ->

@@ -13,6 +13,9 @@
   "author": "Pete Hodgson",
   "license": "Apache 2.0",
   "dependencies": {
-    "serialport": "~1.1.0"
+    "serialport": "~1.1.0",
+    "express": "~3.2.4",
+    "jade": "~0.30.0",
+    "coffee-script": "~1.6.2"
   }
 }
