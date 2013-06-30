@@ -5,11 +5,11 @@
 #include "rgb/blinker_task.h"
 #include "rgb/watchdog.h"
 
-#define WATCHDOG_TIMEOUT (10000)
+#define WATCHDOG_TIMEOUT (120000) //2 minutes
 
 
 Light light(9,10,11);
-Color purple("ffff00");
+Color purple("ff00ff");
 
 BlinkerTask awaitingOrders = BlinkerTask(light,purple,800);
 FaderTask fader = FaderTask(light,Color("ff0000"),Color("00ff10"),1000);
@@ -30,10 +30,10 @@ const Color readRGB(){
 }
 
 void loop() {
-  //awaitingOrders.slice();
-  //watchdog.slice();
+  awaitingOrders.slice();
+  watchdog.slice();
   
-  fader.slice();
+  //fader.slice();
 
   if( !Serial.available() ) return;
 
