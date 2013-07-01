@@ -30,7 +30,7 @@ views =
       body
         h1 Aphex!
         h2 Pick a color
-        input(id='color-picker',type='color',name='color',value='#ff009c')
+        input(id='custom-color-picker',type='text',name='color')
 
   """
 
