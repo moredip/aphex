@@ -31,6 +31,8 @@ views =
         h1 Aphex!
         h2 Pick a color
         input(id='custom-color-picker',type='text',name='color')
+        <br/>
+        input(id='stock-color-picker',type='color',name='color',value='#ff009c')
 
   """
 
