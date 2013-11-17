@@ -1,6 +1,7 @@
 #include "Arduino.h"
 
 #include "rgb/serial_stream.h"
+#include "rgb/led_breather_task.h"
 #include "rgb/fader_task.h"
 #include "rgb/blinker_task.h"
 #include "rgb/watchdog.h"
@@ -13,6 +14,7 @@ Color purple("ff00ff");
 
 BlinkerTask awaitingOrders = BlinkerTask(light,purple,800);
 FaderTask fader = FaderTask(light,Color("ff0000"),Color("00ff10"),1000);
+LedBreatherTask breatherTask = LedBreatherTask(13,2000.0);
 
 Watchdog watchdog = Watchdog( &awaitingOrders, WATCHDOG_TIMEOUT );
 
@@ -32,6 +34,7 @@ const Color readRGB(){
 void loop() {
   awaitingOrders.slice();
   watchdog.slice();
+  breatherTask.slice();
   
   //fader.slice();
 
