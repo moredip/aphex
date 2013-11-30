@@ -3,18 +3,17 @@
 #include "color.h"
 #include "light.h"
 
-class BlinkerTask {
+#include "task.h"
+
+class BlinkerTask : public Task {
 public:
   BlinkerTask( const Light &light, const Color &color, const int rate );
 
+  //virtual
   void slice() const;
-
-  void disable();
-  void enable();
 
 private:
   const Color _color;
   const Light _light;
   const int _rate;
-  bool _disabled;
 };

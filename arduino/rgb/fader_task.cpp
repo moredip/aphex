@@ -4,10 +4,12 @@
 #include "serial_stream.h"
 
 FaderTask::FaderTask( const Light &light, const Color &leftColor, const Color &rightColor, const int duration )
-  : _light(light), _leftColor(leftColor), _rightColor(rightColor), _duration(duration)
+  : Task(), _light(light), _leftColor(leftColor), _rightColor(rightColor), _duration(duration)
 {}
 
 void FaderTask::slice() const{
+  if( shouldSkipSlice() ) return;
+
   long normalizedMillis = millis() % (_duration<<1);
 
   float distance = fabs( (float)(_duration - normalizedMillis)/_duration );
