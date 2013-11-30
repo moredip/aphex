@@ -28,6 +28,10 @@ Color::Color( int red, int green, int blue )
   init( red, green, blue );
 }
 
+Color::Color() {
+  init(0, 0, 0);
+}
+
 int tween( int thisVal, int otherVal, float distance ){
   int range = otherVal-thisVal;
   return thisVal + (distance*range);

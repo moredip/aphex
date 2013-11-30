@@ -4,6 +4,7 @@ class Stream;
 
 class Color {
 public:
+  Color();
   Color( const char *webHexString );
   Color( int red, int green, int blue );
 
