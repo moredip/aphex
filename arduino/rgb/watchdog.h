@@ -4,14 +4,17 @@ class Task;
 
 class Watchdog{
 public:
-  Watchdog( Task *alert, unsigned int timeout );
+  Watchdog( Task *alert, unsigned long timeout );
 
+  bool isFailed() const;
+
+  void forceFail();
   void assuage();
   void slice();
 
 private:
   Task *_alert;
-  const unsigned int _timeout;
+  const unsigned long _timeout;
   long _lastAssuaged;
 
 };

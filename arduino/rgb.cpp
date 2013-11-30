@@ -1,13 +1,15 @@
 #include "Arduino.h"
 
 #include "rgb/serial_stream.h"
-#include "rgb/task.h"
+#include "rgb/null_task.h"
 #include "rgb/led_strober_task.h"
 #include "rgb/fader_task.h"
 #include "rgb/blinker_task.h"
 #include "rgb/watchdog.h"
 
-#define WATCHDOG_TIMEOUT (120000) //2 minutes
+#define ONBOARD_LED (13)
+//#define WATCHDOG_TIMEOUT (120000) //2 minutes
+#define WATCHDOG_TIMEOUT (20000)
 
 
 //Light light(9,10,11);
@@ -15,23 +17,23 @@ Light light(3,5,6);
 Color purple("ff00ff");
 Color off("000000");
 
-FaderTask awaitingOrders = FaderTask(light,purple,off,800);
+FaderTask watchdogAlert = FaderTask(light, Color("000033"), Color("333300"),2000);
+Watchdog watchdog = Watchdog( &watchdogAlert, WATCHDOG_TIMEOUT );
+
 FaderTask fader = FaderTask(light,Color("ff0000"),Color("00ff10"),1000);
-LedStroberTask stroberTask = LedStroberTask(13,1000.0);
+LedStroberTask led13Task = LedStroberTask(ONBOARD_LED,1000.0);
 
-Watchdog watchdog = Watchdog( &awaitingOrders, WATCHDOG_TIMEOUT );
+//void establishContact() {
+  //while (!Serial) {
+    //// wait   for serial port to connect. Needed for Leonardo only
+    //digitalWrite(13,HIGH); delay(100); digitalWrite(13,LOW); delay(1000);
+  //}
 
-void establishContact() {
-  while (!Serial) {
-    // wait   for serial port to connect. Needed for Leonardo only
-    digitalWrite(13,HIGH); delay(100); digitalWrite(13,LOW); delay(1000);
-  }
-
-  while (Serial.available() <= 0) {
-    Serial.println("waiting...");
-    digitalWrite(13,HIGH); delay(200); digitalWrite(13,LOW); delay(50);
-  }
-}
+  //while (Serial.available() <= 0) {
+    //Serial.println("waiting...");
+    //digitalWrite(13,HIGH); delay(200); digitalWrite(13,LOW); delay(50);
+  //}
+//}
 
 
 void setup() {                
@@ -39,12 +41,15 @@ void setup() {
   
   Serial.begin(57600);
 
-  establishContact();
+  watchdog.forceFail();
+
+  //establishContact();
 }
 
-const Color readRGB(){
+const Color readRGB(bool &readSucceeded){
   char rawBytes[] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
-  Serial.readBytes( rawBytes, 6 );
+  int bytesRead = Serial.readBytes( rawBytes, 6 );
+  readSucceeded = bytesRead == 6;
   return Color( rawBytes );
 }
 
@@ -52,30 +57,80 @@ const int readDuration(){
   return Serial.parseInt();
 }
 
-
-void readInput(){
-  const Color startingColor = readRGB();
-  const Color endingColor = readRGB();
-  const int duration = readDuration();
+const bool readSpace(){
+  char buffer[] = {NULL};
+  Serial.readBytes( buffer, 1 );
+  return buffer[0] == ' ';
 }
 
-void loop() {
-  awaitingOrders.slice();
-  watchdog.slice();
-  stroberTask.slice();
+Task *readInput(){
+  bool readSucceeded = false;
+  const Color startingColor = readRGB(readSucceeded);
+  if( !readSucceeded )
+  {
+    Serial << "invalid input (input sequence was too slow)\n";
+    return NULL;
+  }
+
+  if( !readSpace() )
+  {
+    Serial << "invalid input (expected a space seperator between first and second RGB fields)\n";
+    return NULL;
+  }
   
-  //fader.slice();
+  const Color endingColor = readRGB(readSucceeded);
+  if( !readSucceeded )
+  {
+    Serial << "invalid input (input sequence was too slow)\n";
+    return NULL;
+  }
+
+  if( !readSpace() )
+  {
+    Serial << "invalid input (expected a space seperator after second RGB field)\n";
+    return NULL;
+  }
+
+  const int duration = readDuration();
+
+  if( Serial.read() != '\n' )
+  {
+    Serial << "invalid input (expected a new-line terminator after the duration field)\n";
+    return NULL;
+  }
+  
+  Serial << "("; startingColor.describe( Serial ); Serial << ") -> ("; endingColor.describe( Serial );
+  Serial << ") for "<<duration<<"\n";
+
+  return new FaderTask(light,startingColor,endingColor,duration);
+}
+
+Task *inputtedTask = new NullTask();
+
+void loop() {
+  led13Task.slice();
+  watchdog.slice();
+
+  if( !watchdog.isFailed() ){
+    inputtedTask->slice();
+  }
 
   if( !Serial.available() ) return;
 
-  awaitingOrders.disable();
   watchdog.assuage();
 
-  readInput();
+  Task *nextInputtedTask = readInput();
+  if( nextInputtedTask )
+  {
+    delete inputtedTask;
+    inputtedTask = nextInputtedTask;
+  }
+
+  Serial << "ready!\n";
  
-  const Color color = readRGB();
-  color.describe( Serial ); Serial << '\n';
-  light.displayColor( color );
+  //const Color color = readRGB();
+  //color.describe( Serial ); Serial << '\n';
+  //light.displayColor( color );
 }
 
 

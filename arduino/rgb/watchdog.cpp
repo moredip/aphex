@@ -2,19 +2,31 @@
 #include "watchdog.h"
 #include "task.h"
 
-Watchdog::Watchdog( Task *alert, unsigned int timeout ) 
+Watchdog::Watchdog( Task *alert, unsigned long timeout ) 
   : _alert(alert), _timeout(timeout)
 {
   assuage();
 }
+
+bool Watchdog::isFailed() const {
+  return ( millis() - _lastAssuaged > _timeout );
+}
+
 
 void Watchdog::assuage(){
   _lastAssuaged = millis();
   _alert->disable();
 }
 
+void Watchdog::forceFail(){
+  _lastAssuaged = 0;
+  _alert->enable();
+}
+
 void Watchdog::slice(){
-  if( millis() - _lastAssuaged > _timeout )
+  _alert->slice();
+
+  if( isFailed() )
     _alert->enable();
 }
 
