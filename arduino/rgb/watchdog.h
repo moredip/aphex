@@ -1,16 +1,16 @@
 #pragma once
 
-class BlinkerTask;
+class Task;
 
 class Watchdog{
 public:
-  Watchdog( BlinkerTask *alert, unsigned int timeout );
+  Watchdog( Task *alert, unsigned int timeout );
 
   void assuage();
   void slice();
 
 private:
-  BlinkerTask *_alert;
+  Task *_alert;
   const unsigned int _timeout;
   long _lastAssuaged;
 

@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "watchdog.h"
-#include "blinker_task.h"
+#include "task.h"
 
-Watchdog::Watchdog( BlinkerTask *alert, unsigned int timeout ) 
+Watchdog::Watchdog( Task *alert, unsigned int timeout ) 
   : _alert(alert), _timeout(timeout)
 {
   assuage();
@@ -10,6 +10,7 @@ Watchdog::Watchdog( BlinkerTask *alert, unsigned int timeout )
 
 void Watchdog::assuage(){
   _lastAssuaged = millis();
+  _alert->disable();
 }
 
 void Watchdog::slice(){
