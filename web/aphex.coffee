@@ -7,7 +7,10 @@ createAphex = (serialPort)->
 
   changeColor = (hexRgb)->
     console.log("changing color to: #{hexRgb}")
-    serialPort.write( hexRgb )
+    #fullCommand = "#{hexRgb} 000000 2000\n"
+    #fullCommand = "#{hexRgb} ffffff 2000\n"
+    fullCommand = "#{hexRgb} #{hexRgb} 10\n"
+    serialPort.write( fullCommand )
 
   { changeColor }
 
