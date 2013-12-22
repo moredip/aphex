@@ -29,11 +29,18 @@ views =
         script(src='jquery-ui-1.10.3.custom.min.js')
         script(src='client.js')
       body
-        h1 Aphex!
-        h2 Pick a color
-        #red
-        #green
-        #blue
+        h1 color mixing
+        hr
+        #sliders
+          #red
+            .slider
+            .number
+          #green
+            .slider
+            .number
+          #blue
+            .slider
+            .number
         #swatch.ui-widget-content.ui-corner-all
   """
 
@@ -50,9 +57,7 @@ for staticFile in ['jquery-1.9.1.min.js','jquery-ui-1.10.3.custom.min.js','jquer
     app.get "/#{staticFile}", (req, res)->
       res.sendfile("#{__dirname}/#{staticFile}")
 
-
-Aphex.connectToLight getLightTty(), (light)->
-
+startApp = (light)->
   app.post '/change-color/:color', (req,res)->
     newColor = req.params.color
     light.changeColor(newColor)
@@ -60,3 +65,6 @@ Aphex.connectToLight getLightTty(), (light)->
 
   app.listen(3000)
   console.log('Listening on port 3000')
+
+#Aphex.connectToLight getLightTty(), startApp
+startApp()

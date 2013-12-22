@@ -10,18 +10,29 @@ hexFromRGB = (r, g, b)->
   ].join("")
 
 updateSwatch = (hex)->
-  $( "#swatch" ).css( "background-color", "#" + hex )
+  hashHex = "#"+hex
+  $( "#swatch" )
+    .css( "background-color", hashHex )
+    .text(hashHex)
 
 updateAphex = (color)->
   $.post( "/change-color/#{color}" )
     .done( -> console.log( 'successful color update to ', color ) )
     .fail( -> console.log( 'failed to change color to ', color ) )
 
+updateSliderNumber = ($sliderNumber,val)->
+  percentage = ((val/255)*100).toFixed()
+  $sliderNumber.text(percentage+"%")
+
 colorSelected = ->
-  red = $( "#red" ).slider( "value" )
-  green = $( "#green" ).slider( "value" )
-  blue = $( "#blue" ).slider( "value" )
+  red = $( "#red .slider" ).slider( "value" )
+  green = $( "#green .slider" ).slider( "value" )
+  blue = $( "#blue .slider" ).slider( "value" )
+
   hex = hexFromRGB( red, green, blue )
+  updateSliderNumber( $("#red .number"), red )
+  updateSliderNumber( $("#green .number"), green )
+  updateSliderNumber( $("#blue .number"), blue )
 
   updateSwatch(hex)
   updateAphex(hex)
@@ -29,13 +40,13 @@ colorSelected = ->
 # based on http://jqueryui.com/slider/#colorpicker
 
 $ ->
-  $( "#red, #green, #blue" ).slider(
+  $( "#sliders .slider" ).slider(
     orientation: "horizontal"
     range: "min"
     max: 255
     slide: colorSelected
     change: colorSelected
   )
-  $( "#red" ).slider( "value", 255 )
-  $( "#green" ).slider( "value", 140 )
-  $( "#blue" ).slider( "value", 60 )
+  $( "#red .slider" ).slider( "value", 255 )
+  $( "#green .slider" ).slider( "value", 140 )
+  $( "#blue .slider" ).slider( "value", 60 )
