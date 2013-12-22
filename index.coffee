@@ -24,8 +24,9 @@ randomColor = ->
 
 requestRandomColor = (serialPort)->
   color = randomColor()
-  console.log( 'sending ' + color )
-  serialPort.write color
+  fullCommand = "#{color} #{color} 10\n"
+  console.log( 'sending ' + fullCommand )
+  serialPort.write fullCommand
 
 
 letsGo = (serialPort)->
@@ -47,6 +48,6 @@ do ->
     console.log('open')
 
     # apparently the board will drop the first few bytes as junk. Let's send it some junk.
-    serialPort.write('crap'*20)
+    serialPort.write('junk'*20)
 
     setTimeout( (-> letsGo(serialPort)), 500 )

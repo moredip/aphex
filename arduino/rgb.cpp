@@ -20,7 +20,7 @@ Light light(3,5,6);
 FaderTask watchdogAlert = FaderTask(light, Color("000033"), Color("333300"),2000);
 Watchdog watchdog = Watchdog( &watchdogAlert, WATCHDOG_TIMEOUT );
 
-LedStroberTask led13Task = LedStroberTask(ONBOARD_LED,1000.0);
+LedStroberTask led13Task = LedStroberTask(ONBOARD_LED,2000.0,100.0);
 
 void setup() {                
   light.setup();

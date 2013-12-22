@@ -2,17 +2,17 @@
 
 #include "Arduino.h"
 
-LedStroberTask::LedStroberTask( const int pin, const int period ) 
-  : _pin(pin), _period(period)
+LedStroberTask::LedStroberTask( const int pin, const int onPeriod, const int offPeriod ) 
+  : _pin(pin), _onPeriod(onPeriod), _offPeriod(offPeriod)
 {
   pinMode(_pin,OUTPUT);
 }
 
 void LedStroberTask::slice() const {
-  long normalizedMillis = millis() % _period;
-  if( normalizedMillis < (_period>>1) ){
-    digitalWrite( _pin, LOW );
-  }else{
+  long normalizedMillis = millis() % (_onPeriod+_offPeriod);
+  if( normalizedMillis < _onPeriod ){
     digitalWrite( _pin, HIGH );
+  }else{
+    digitalWrite( _pin, LOW );
   }
 }
