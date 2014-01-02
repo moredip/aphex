@@ -4,7 +4,6 @@
 #include "aphex/null_task.h"
 #include "aphex/led_strober_task.h"
 #include "aphex/fader_task.h"
-#include "aphex/blinker_task.h"
 #include "aphex/watchdog.h"
 
 #include "aphex/input.h"
@@ -43,7 +42,9 @@ void loop() {
 
   if( !Serial.available() ) return;
 
+  // from "aphex/input.h"
   Task *nextInputtedTask = input_parse_task(light);
+
   if( nextInputtedTask )
   {
     delete inputtedTask;
