@@ -8,6 +8,7 @@
 class Input {
   public:
     Input( const Light &light );
+    ~Input();
 
     void readTask();
 
@@ -43,6 +44,12 @@ Task *input_parse_task( const Light &light )
 }
 
 Input::Input( const Light &light ) : _light(light), _duration(0), _parsingStage(""), _parsedTask(NULL) {}
+
+Input::~Input(){
+  if( _parsedTask )
+    delete _parsedTask;
+}
+
 
 const Color readRGB(bool &readSucceeded){
   char rawBytes[] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
