@@ -3,10 +3,10 @@
 #include "light.h"
 #include "color.h"
 
-Light::Light(int redPin, int bluePin, int greenPin){
+Light::Light(int redPin, int greenPin, int bluePin ){
   _redPin = redPin;
-  _bluePin = bluePin;
   _greenPin = greenPin;
+  _bluePin = bluePin;
 }
 
 void Light::setup() const{
@@ -25,6 +25,6 @@ void Light::displayColor( const Color &color ) const{
 
 void Light::displayRGB( int red, int blue, int green ) const{
   analogWrite( _redPin, constrain(red, 0, 255) );
-  analogWrite( _bluePin, constrain(blue, 0, 255) );
   analogWrite( _greenPin, constrain(green, 0, 255) );
+  analogWrite( _bluePin, constrain(blue, 0, 255) );
 }

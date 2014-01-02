@@ -4,7 +4,7 @@ class Color;
 
 class Light {
 public:
-  Light(int redPin, int bluePin, int greenPin );
+  Light(int redPin, int greenPin, int bluePin );
 
   void setup() const;
 
