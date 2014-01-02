@@ -1,13 +1,13 @@
 #include "Arduino.h"
 
-#include "rgb/serial_stream.h"
-#include "rgb/null_task.h"
-#include "rgb/led_strober_task.h"
-#include "rgb/fader_task.h"
-#include "rgb/blinker_task.h"
-#include "rgb/watchdog.h"
+#include "aphex/serial_stream.h"
+#include "aphex/null_task.h"
+#include "aphex/led_strober_task.h"
+#include "aphex/fader_task.h"
+#include "aphex/blinker_task.h"
+#include "aphex/watchdog.h"
 
-#include "rgb/input.h"
+#include "aphex/input.h"
 
 #define ONBOARD_LED (13)
 #define SERIAL_TIMEOUT (5000) // in millis

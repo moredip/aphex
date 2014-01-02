@@ -1,4 +1,4 @@
-SOURCES := aphex.cpp rgb/task.cpp rgb/blinker_task.cpp rgb/color.cpp rgb/fader_task.cpp rgb/light.cpp rgb/watchdog.cpp rgb/led_breather_task.cpp rgb/led_strober_task.cpp rgb/input.cpp
+SOURCES := aphex.cpp aphex/task.cpp aphex/blinker_task.cpp aphex/color.cpp aphex/fader_task.cpp aphex/light.cpp aphex/watchdog.cpp aphex/led_breather_task.cpp aphex/led_strober_task.cpp aphex/input.cpp
 # SOURCES := echo.cpp
 
 # BOARD := nano328

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rgb/light.h"
+#include "light.h"
 
 class Task;
 

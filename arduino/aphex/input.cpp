@@ -2,8 +2,8 @@
 
 #include "Arduino.h"
 
-#include "rgb/serial_stream.h"
-#include "rgb/fader_task.h"
+#include "serial_stream.h"
+#include "fader_task.h"
 
 class Input {
   public:
